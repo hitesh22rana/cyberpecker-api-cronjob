@@ -1,6 +1,5 @@
 import os
 import requests
-from queue import Queue
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -11,7 +10,6 @@ class cyberPeckerCronJob:
         self.session = requests.session()
         self.BASE_URL = os.getenv("BASE_URL")
         self.WORKERS = 4
-        self.tasks = Queue()
 
     def _getNewsQueries(self):
         return self.session.get(self.BASE_URL, timeout=10).json()
@@ -26,15 +24,5 @@ class cyberPeckerCronJob:
 
         return routes
 
-    def _getNewsResponse(self, route):
+    def getNewsResponse(self, route):
         self.session.get(route, timeout=10)
-
-    def worker(self):
-        while True:
-            address = self.tasks.get()
-
-            self._getNewsResponse(address)
-            self.tasks.task_done()
-            
-            if(self.tasks.empty()):
-                break

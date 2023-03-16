@@ -3,7 +3,6 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-
 class CyberPeckerCronJob:
 
     def __init__(self) -> None:
@@ -16,14 +15,7 @@ class CyberPeckerCronJob:
         return self.session.get(self.URL, timeout=10).json()
 
     def _get_news_route(self):
-        data = self.__get_news_queries
-
-        routes = []
-        for individual_link in data:
-            route = list(individual_link.keys())[0]
-            routes.append(self.URL + route)
-
-        return routes
+        return [self.URL + list(individual_link.keys())[0] for individual_link in self.__get_news_queries]
 
     def get_news_response(self, route):
         self.session.get(route, timeout=10)
